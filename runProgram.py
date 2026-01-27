@@ -19,7 +19,7 @@ input_filename = 'Example.csv'
 diagram_title = 'Example'
 output_filetype = '.png'
 
-x_mode = 'd'
+x_mode = 'S'
 # 'd': distance
 # 'P': orbital period
 # 'S': irradiance
@@ -255,7 +255,11 @@ for system_index in ticks:
                      '--',
                      color=colour,alpha=0.5)
             # Draw name
-            plt.text(x_med * 0.96,y_pos + 0.025,
+            if x_mode == 'S':  # any mode that invert yaxis: plt.gca().invert_yaxis()
+                boundary_x_pos_multiplier = 1.06
+            else:
+                boundary_x_pos_multiplier = 0.96
+            plt.text(x_med * boundary_x_pos_multiplier,y_pos + 0.025,
                      name,
                      fontsize=6,
                      rotation='vertical',

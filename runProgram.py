@@ -12,11 +12,11 @@ import src.utils as utils
 
 # INPUTS
 
-input_folder = 'Input/'
+input_folder = 'Input/PlaSysArchi/'
 output_folder = 'Output/'
 
-input_filename = 'Example.csv'
-diagram_title = 'Example'
+input_filename = '4 JovianDynHot.csv'
+diagram_title = 'Dynamically Hot Jovians'
 output_filetype = '.png'
 
 x_mode = 'd'
@@ -33,7 +33,7 @@ render_primaries = True
 
 # Set secondaries' scale
 secondary_standard_mass = const.M_earth.value * 1
-secondary_standard_markersize = 8
+secondary_standard_markersize = 10
 
 
 
@@ -148,26 +148,39 @@ for system_index in ticks:
         e = df_PlanetSys['Eccentricity'][index]
         if np.isnan(e):
             e = 0  # set default eccentricity of 0
+        d_inner = utils.length_conversion(df_PlanetSys['InnerDistance'][index],unit_d,plot_unit_d)
+        d_outer = utils.length_conversion(df_PlanetSys['OuterDistance'][index],unit_d,plot_unit_d)
+        
+        # ORBITAL PERIOD: used by all
+        unit_P = df_PlanetSys['unit_P'][index]
+        P = utils.time_conversion(df_PlanetSys['OrbitalPeriod'][index],unit_P,plot_unit_t)
+        
         # This scheme assumes an object has either
         # - SemiMajorAxis (and Eccentricity)
         # - both InnerDistance and OuterDistance
-        if not np.isnan(a):
+        # It prioritizes InnerDistance and OuterDistance
+        # over SemiMajorAxis and Eccentricity.
+        if (not np.isnan(d_inner)) & (not np.isnan(d_outer)):
+            a = np.mean([d_inner,d_outer])
+        else:
             d_inner = a * (1-e)
             d_outer = a * (1+e)
-        else:
-            d_inner = utils.length_conversion(df_PlanetSys['InnerDistance'][index],unit_d,plot_unit_d)
-            d_outer = utils.length_conversion(df_PlanetSys['OuterDistance'][index],unit_d,plot_unit_d)
-            a = np.mean([d_inner,d_outer])
         
-        # ORBITAL PERIOD: used by all
-        P, unit_P = df_PlanetSys['OrbitalPeriod'][index], df_PlanetSys['unit_P'][index]
-        if not np.isnan(P):
-            P = utils.time_conversion(P,unit_P,plot_unit_t)
-            P_min, P_max = P, P  # placeholder values
+        # DISTANCES <-> ORBITAL PERIOD
+        # If OrbitalPeriod is not provided, or for inner and outer boundaries of Belts
+        # - Assumes a is available
         if np.isnan(P):
-            P = utils.orbital_period(a,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)
-            P_min = utils.orbital_period(d_inner,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)
-            P_max = utils.orbital_period(d_outer,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)
+            P = utils.find_P(a,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)  # used by Secondary and Boundary
+            P_min = utils.find_P(d_inner,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)  # used by Belt
+            P_max = utils.find_P(d_outer,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)  # used by Belt
+        else:
+            P_min, P_max = P, P  # placeholder values
+        # If none of SemiMajorAxis or Inner/OuterDistances are provided
+        # - Assumes P is available
+        if np.isnan(a):
+            a = utils.find_a(P,unit_P, M_pri,unit_M_pri, plot_unit_d)
+            d_inner = a * (1-e)
+            d_outer = a * (1+e)
         
         # INCLINATION: used by Secondary
         # denotes that the provided mass value is minimum mass

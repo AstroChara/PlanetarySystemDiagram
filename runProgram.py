@@ -15,8 +15,8 @@ import src.utils as utils
 input_folder = 'Input/'
 output_folder = 'Output/'
 
-input_filename = 'SolarSystem.csv'
-diagram_title = 'Solar System'
+input_filename = 'Example.csv'
+diagram_title = 'Example'
 output_filetype = '.png'
 
 x_mode = 'd'
@@ -144,17 +144,20 @@ for system_index in ticks:
         # DISTANCES: used by all
         #   SemiMajorAxis, InnerDistance, OuterDistance, unit_d, Eccentricity
         unit_d = df_PlanetSys['unit_d'][index]
-        # This scheme assumes an object has either
-        # - both SemiMajorAxis and Eccentricity
-        # - both InnerDistance and OuterDistance
         a = utils.length_conversion(df_PlanetSys['SemiMajorAxis'][index],unit_d,plot_unit_d)
         e = df_PlanetSys['Eccentricity'][index]
-        if (not np.isnan(a)) and (not np.isnan(e)):
+        if np.isnan(e):
+            e = 0  # set default eccentricity of 0
+        # This scheme assumes an object has either
+        # - SemiMajorAxis (and Eccentricity)
+        # - both InnerDistance and OuterDistance
+        if not np.isnan(a):
             d_inner = a * (1-e)
             d_outer = a * (1+e)
         else:
             d_inner = utils.length_conversion(df_PlanetSys['InnerDistance'][index],unit_d,plot_unit_d)
             d_outer = utils.length_conversion(df_PlanetSys['OuterDistance'][index],unit_d,plot_unit_d)
+            a = np.mean([d_inner,d_outer])
         
         # ORBITAL PERIOD: used by all
         P, unit_P = df_PlanetSys['OrbitalPeriod'][index], df_PlanetSys['unit_P'][index]
@@ -233,9 +236,17 @@ for system_index in ticks:
         
         if objectType == 'Boundary':
             y_pos = system_index-0.5
+            # Draw boundary itself
             plt.plot([x_med,x_med],[y_pos,y_pos+1],
                      '--',
                      color=colour,alpha=0.5)
+            # Draw name
+            plt.text(x_med * 0.96,y_pos + 0.025,
+                     name,
+                     fontsize=6,
+                     rotation='vertical',
+                     horizontalalignment='center',verticalalignment='top',
+                     color='#ffffff',alpha=0.5)
 
 
 

@@ -1,0 +1,12 @@
+System,ObjectType,Name,Mass,unit_M,Radius,unit_R,Luminosity,OrbitalPeriod,unit_P,SemiMajorAxis,InnerDistance,OuterDistance,unit_d,Eccentricity,Inclination,Colour
+Sol,Primary,Sol,1.000,M_sun,1.000,R_sun,1.000,,,,,,,,,#f2ffff
+Sol,Secondary,Mercury,0.055,M_earth,,,,87.9691,d,0.387,,,au,0.205630,,#4f4c45
+Sol,Secondary,Venus,0.815,M_earth,,,,224.701,d,0.723,,,au,0.006772,,#f5f9e1
+Sol,Secondary,Earth,1.000,M_earth,,,,365.25,d,1.000,,,au,0.0167086,,#8d909f
+Sol,Secondary,Mars,0.107,M_earth,,,,686.980,d,1.524,,,au,0.0934,,#87694b
+Sol,Belt,Asteroid Belt,,,,,,,,,2.1,3.25,au,,,#262625
+Sol,Secondary,Jupiter,317.828,M_earth,,,,4332.59,d,5.204,,,au,0.0489,,#d8d8c7
+Sol,Secondary,Saturn,95.161,M_earth,,,,10755.70,d,9.582,,,au,0.0565,,#e4d7b4
+Sol,Secondary,Uranus,14.536,M_earth,,,,30688.5,d,19.191,,,au,0.04717,,#b7dfe7
+Sol,Secondary,Neptune,17.148,M_earth,,,,60195,d,30.07,,,au,0.008678,,#9ac7dc
+Sol,Belt,Edgeworth-Kuiper Belt,,,,,,,,,39,48,au,,,#3f3931

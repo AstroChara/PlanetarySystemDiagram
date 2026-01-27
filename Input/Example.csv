@@ -1,0 +1,23 @@
+System,ObjectType,Name,Mass,unit_M,Radius,unit_R,Luminosity,OrbitalPeriod,unit_P,SemiMajorAxis,InnerDistance,OuterDistance,unit_d,Eccentricity,Inclination,Colour
+Sol,Primary,Sol,1.000,M_sun,1.000,R_sun,1.000,,,,,,,,,#f2ffff
+Sol,Secondary,Mercury,0.055,M_earth,,,,87.9691,d,0.387,,,au,0.205630,,#4f4c45
+Sol,Secondary,Venus,0.815,M_earth,,,,224.701,d,0.723,,,au,0.006772,,#f5f9e1
+Sol,Secondary,Earth,1.000,M_earth,,,,365.25,d,1.000,,,au,0.0167086,,#8d909f
+Sol,Secondary,Mars,0.107,M_earth,,,,686.980,d,1.524,,,au,0.0934,,#87694b
+Sol,Belt,Asteroid Belt,,,,,,,,,2.1,3.25,au,,,#262625
+Sol,Secondary,Jupiter,317.828,M_earth,,,,4332.59,d,5.204,,,au,0.0489,,#d8d8c7
+Sol,Secondary,Saturn,95.161,M_earth,,,,10755.70,d,9.582,,,au,0.0565,,#e4d7b4
+Sol,Secondary,Uranus,14.536,M_earth,,,,30688.5,d,19.191,,,au,0.04717,,#b7dfe7
+Sol,Secondary,Neptune,17.148,M_earth,,,,60195,d,30.07,,,au,0.008678,,#9ac7dc
+Sol,Belt,Edgeworth-Kuiper Belt,,,,,,,,,39,48,au,,,#3f3931
+
+Sol,Boundary,Water Frost Line,,,,,,,,3,,,au,,,#ffffff
+
+Kepler-47 AB,Primary,A,0.957,M_sun,0.936,R_sun,0.840,,,,,,,,,#f4fff9
+Kepler-47 AB,Primary,B,0.342,M_sun,0.338,R_sun,0.014,,,,,,,,,#ffe698
+Kepler-47 AB,Boundary,Circumbinary Stability Limit,,,,,,,,0.27686484,,,au,,,#ffffff
+Kepler-47 AB,Secondary,b,2.07,M_earth,3.05,R_jup,,49.4643,d,0.2877,,,au,0.0210,,#3f68fe
+Kepler-47 AB,Secondary,d,19.02,M_earth,7.04,R_jup,,187.366,d,0.6992,,,au,0.024,,#f3a425
+Kepler-47 AB,Secondary,c,3.17,M_earth,4.65,R_jup,,303.227,d,0.9638,,,au,0.044,,#3f68fe
+
+Sol,Secondary,HD 219134 b got lost,4.59,M_earth,1.542,R_earth,,3.092926,d,0.03876,,,au,0,,#42a04a

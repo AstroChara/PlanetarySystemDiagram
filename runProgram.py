@@ -12,11 +12,11 @@ import src.utils as utils
 
 # INPUTS
 
-input_folder = 'Input/PlaSysArchi/'
+input_folder = 'Input/'
 output_folder = 'Output/'
 
-input_filename = '4 JovianDynHot.csv'
-diagram_title = 'Dynamically Hot Jovians'
+input_filename = 'Example.csv'
+diagram_title = 'Example'
 output_filetype = '.png'
 
 x_mode = 'd'
@@ -152,8 +152,9 @@ for system_index in ticks:
         d_outer = utils.length_conversion(df_PlanetSys['OuterDistance'][index],unit_d,plot_unit_d)
         
         # ORBITAL PERIOD: used by all
-        unit_P = df_PlanetSys['unit_P'][index]
-        P = utils.time_conversion(df_PlanetSys['OrbitalPeriod'][index],unit_P,plot_unit_t)
+        P, unit_P = df_PlanetSys['OrbitalPeriod'][index], df_PlanetSys['unit_P'][index]
+        if (not np.isnan(P)):
+            P = utils.time_conversion(P,unit_P,plot_unit_t)
         
         # This scheme assumes an object has either
         # - SemiMajorAxis (and Eccentricity)

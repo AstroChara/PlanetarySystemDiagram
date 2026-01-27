@@ -19,7 +19,7 @@ input_filename = 'Example.csv'
 diagram_title = 'Example'
 output_filetype = '.png'
 
-x_mode = 'S'
+x_mode = 'd'
 # 'd': distance
 # 'P': orbital period
 # 'S': irradiance

@@ -4,6 +4,7 @@ from scipy.stats import gmean
 from astropy import constants as const
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
+from pathlib import Path
 
 import src.utils as utils
 
@@ -14,8 +15,8 @@ import src.utils as utils
 input_folder = 'Input/'
 output_folder = 'Output/'
 
-input_filename = 'PlaSysArchitectures-JovianDynHot.csv'
-diagram_title = 'Planetary System Architectures - Dynamically Hot Jovians'
+input_filename = 'SolarSystem.csv'
+diagram_title = 'Solar System'
 output_filetype = '.png'
 
 x_mode = 'd'
@@ -28,7 +29,7 @@ plot_unit_t = 'd'
 plot_unit_irradiance = 'So'
 
 # Render primary flag
-render_primaries = False
+render_primaries = True
 
 # Set secondaries' scale
 secondary_standard_mass = const.M_earth.value * 1
@@ -248,4 +249,6 @@ elif x_mode == 'P':
 elif x_mode == 'S':
     output_filename_suffix = '_irradiance_{0}'.format(plot_unit_irradiance)
 
-plt.savefig(output_folder + diagram_title + output_filename_suffix + output_filetype)
+output_filepath = Path(output_folder + diagram_title + output_filename_suffix + output_filetype)
+output_filepath.parent.mkdir(exist_ok=True, parents=True)
+plt.savefig(output_filepath)

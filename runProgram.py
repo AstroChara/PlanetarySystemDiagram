@@ -5,7 +5,7 @@ from astropy import constants as const
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
-import utils
+import src.utils as utils
 
 
 

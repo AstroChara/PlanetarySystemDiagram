@@ -31,9 +31,21 @@ plot_unit_irradiance = 'So'
 # Render primary flag
 render_primaries = True
 
-# Set secondaries' scale
+# Set secondary render mode and scale
+secondary_scale_mode = 'M'
+# 'M': mass (cube root of mass)
+# 'R': radius (linear)
+# (invalid): render secondaries as equal-sized stars
 secondary_standard_mass = const.M_earth.value * 1
+secondary_standard_radius = const.R_earth.value * 1
 secondary_standard_markersize = 10
+
+# Scale mode in Title
+secondary_scale_text = ''
+if secondary_scale_mode == 'M':
+    secondary_scale_text = '(scaled with cube root of mass)'
+elif secondary_scale_mode == 'R':
+    secondary_scale_text = '(scaled with radius)'
 
 
 
@@ -51,7 +63,7 @@ N_systems = len(system_names)
 
 fig, ax = plt.subplots()
 
-plt.title(diagram_title)
+plt.title('{0} {1}'.format(diagram_title,secondary_scale_text))
 fig.set_size_inches(15, (N_systems*2)+1)
 plt.grid(True, which="both", alpha=0.25)
 plt.style.use('dark_background')
@@ -140,6 +152,8 @@ for system_index in ticks:
         
         # RADIUS: used by Secondary
         R, unit_R = df_PlanetSys['Radius'][index], df_PlanetSys['unit_R'][index]
+        if not np.isnan(R):
+            R = utils.length_conversion(R,unit_R,'m')
         
         # DISTANCES: used by all
         #   SemiMajorAxis, InnerDistance, OuterDistance, unit_d, Eccentricity
@@ -212,8 +226,15 @@ for system_index in ticks:
         if objectType == 'Secondary':
             N_secondaries += 1
             # Draw object itself
-            markersize = np.cbrt(M/secondary_standard_mass) * secondary_standard_markersize
-            plt.plot(x_med,system_index,'.',
+            marker_shape = '.'
+            if (secondary_scale_mode == 'M') & (not np.isnan(M)):
+                markersize = np.cbrt(M/secondary_standard_mass) * secondary_standard_markersize
+            elif (secondary_scale_mode == 'R') & (not np.isnan(R)):
+                markersize = R/secondary_standard_radius * secondary_standard_markersize
+            else:
+                markersize = secondary_standard_markersize
+                marker_shape = '*'
+            plt.plot(x_med,system_index,marker_shape,
                      markersize=markersize,
                      markeredgewidth=0,
                      color=colour)
@@ -272,11 +293,16 @@ for system_index in ticks:
 
 output_filename_suffix = ''
 if x_mode == 'd':
-    output_filename_suffix = '_distance_{0}'.format(plot_unit_d)
+    output_filename_suffix += '_distance_{0}'.format(plot_unit_d)
 elif x_mode == 'P':
-    output_filename_suffix = '_period_{0}'.format(plot_unit_t)
+    output_filename_suffix += '_period_{0}'.format(plot_unit_t)
 elif x_mode == 'S':
-    output_filename_suffix = '_irradiance_{0}'.format(plot_unit_irradiance)
+    output_filename_suffix += '_irradiance_{0}'.format(plot_unit_irradiance)
+
+if secondary_scale_mode == 'M':
+    output_filename_suffix += '_mass'
+elif secondary_scale_mode == 'R':
+    output_filename_suffix += '_radius'
 
 output_filepath = Path(output_folder + diagram_title + output_filename_suffix + output_filetype)
 output_filepath.parent.mkdir(exist_ok=True, parents=True)

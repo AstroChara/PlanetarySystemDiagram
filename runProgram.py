@@ -147,27 +147,29 @@ for system_index in ticks:
         
         # MASS: used by Secondary
         M, unit_M = df_PlanetSys['Mass'][index], df_PlanetSys['unit_M'][index]
-        if not np.isnan(M):
+        if not pd.isnull(M):
             M = utils.mass_conversion(M,unit_M,'kg')
         
         # RADIUS: used by Secondary
         R, unit_R = df_PlanetSys['Radius'][index], df_PlanetSys['unit_R'][index]
-        if not np.isnan(R):
+        if not pd.isnull(R):
             R = utils.length_conversion(R,unit_R,'m')
         
         # DISTANCES: used by all
         #   SemiMajorAxis, InnerDistance, OuterDistance, unit_d, Eccentricity
         unit_d = df_PlanetSys['unit_d'][index]
+        if pd.isnull(unit_d):
+            unit_d = 'm'  # default unit as placeholder
         a = utils.length_conversion(df_PlanetSys['SemiMajorAxis'][index],unit_d,plot_unit_d)
         e = df_PlanetSys['Eccentricity'][index]
-        if np.isnan(e):
+        if pd.isnull(e):
             e = 0  # set default eccentricity of 0
         d_inner = utils.length_conversion(df_PlanetSys['InnerDistance'][index],unit_d,plot_unit_d)
         d_outer = utils.length_conversion(df_PlanetSys['OuterDistance'][index],unit_d,plot_unit_d)
         
         # ORBITAL PERIOD: used by all
         P, unit_P = df_PlanetSys['OrbitalPeriod'][index], df_PlanetSys['unit_P'][index]
-        if (not np.isnan(P)):
+        if (not pd.isnull(P)):
             P = utils.time_conversion(P,unit_P,plot_unit_t)
         
         # This scheme assumes an object has either
@@ -175,7 +177,7 @@ for system_index in ticks:
         # - both InnerDistance and OuterDistance
         # It prioritizes InnerDistance and OuterDistance
         # over SemiMajorAxis and Eccentricity.
-        if (not np.isnan(d_inner)) & (not np.isnan(d_outer)):
+        if (not pd.isnull(d_inner)) & (not pd.isnull(d_outer)):
             a = np.mean([d_inner,d_outer])
         else:
             d_inner = a * (1-e)
@@ -184,7 +186,7 @@ for system_index in ticks:
         # DISTANCES <-> ORBITAL PERIOD
         # If OrbitalPeriod is not provided, or for inner and outer boundaries of Belts
         # - Assumes a is available
-        if np.isnan(P):
+        if pd.isnull(P):
             P = utils.find_P(a,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)  # used by Secondary and Boundary
             P_min = utils.find_P(d_inner,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)  # used by Belt
             P_max = utils.find_P(d_outer,plot_unit_d, M_pri,unit_M_pri, plot_unit_t)  # used by Belt
@@ -192,7 +194,7 @@ for system_index in ticks:
             P_min, P_max = P, P  # placeholder values
         # If none of SemiMajorAxis or Inner/OuterDistances are provided
         # - Assumes P is available
-        if np.isnan(a):
+        if pd.isnull(a):
             a = utils.find_a(P,unit_P, M_pri,unit_M_pri, plot_unit_d)
             d_inner = a * (1-e)
             d_outer = a * (1+e)
@@ -200,7 +202,7 @@ for system_index in ticks:
         # INCLINATION: used by Secondary
         # denotes that the provided mass value is minimum mass
         inc = df_PlanetSys['Inclination'][index] * np.pi/180
-        if not np.isnan(inc):
+        if not pd.isnull(inc):
             M = M / np.sin(inc)
         
         # COLOUR: used by all
@@ -227,9 +229,9 @@ for system_index in ticks:
             N_secondaries += 1
             # Draw object itself
             marker_shape = '.'
-            if (secondary_scale_mode == 'M') & (not np.isnan(M)):
+            if (secondary_scale_mode == 'M') & (not pd.isnull(M)):
                 markersize = np.cbrt(M/secondary_standard_mass) * secondary_standard_markersize
-            elif (secondary_scale_mode == 'R') & (not np.isnan(R)):
+            elif (secondary_scale_mode == 'R') & (not pd.isnull(R)):
                 markersize = R/secondary_standard_radius * secondary_standard_markersize
             else:
                 markersize = secondary_standard_markersize
